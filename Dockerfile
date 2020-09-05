@@ -1,6 +1,6 @@
 # parameters
-ARG REPO_NAME="Fundamentals-Robotics-Pablo-Ruiz"
-ARG DESCRIPTION="Base class repo for UML EECE 5560"
+ARG REPO_NAME="fundamentals-robotics-pablo-ruiz"
+ARG DESCRIPTION="Fundamentals of Robotics student repo Pablo Ruiz"
 ARG MAINTAINER="Pablo Ruiz (pablo_ruiz@student.uml.edu)"
 # pick an icon from: https://fontawesome.com/v4.7.0/icons/
 ARG ICON="cube"
