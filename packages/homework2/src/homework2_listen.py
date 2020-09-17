@@ -13,7 +13,8 @@ class listener:
 
 
     def callback (self, data):
-        pass
+        rospy.loginfo(data)
+       
 
 if __name__ == '__main__' :
 
