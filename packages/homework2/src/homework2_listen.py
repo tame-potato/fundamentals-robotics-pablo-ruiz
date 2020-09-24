@@ -9,7 +9,7 @@ from std_msgs.msg import Float32
 class listener:
 
     def __init__ (self):
-        self.sub = rospy.Subscriber("total", Float32, self.callback)
+        self.sub = rospy.Subscriber("/homework1/total", Float32, self.callback)
 
 
     def callback (self, data):

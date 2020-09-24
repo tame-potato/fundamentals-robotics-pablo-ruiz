@@ -9,7 +9,7 @@ from std_msgs.msg import Float32
 
 class talker:
     def __init__(self, frequency):
-        self.pub = rospy.Publisher("delta", Float32, queue_size=10)
+        self.pub = rospy.Publisher("/homework1/delta", Float32, queue_size=10)
         self.rate = rospy.Rate(frequency) #set message frequency
 
         self.message = 0
