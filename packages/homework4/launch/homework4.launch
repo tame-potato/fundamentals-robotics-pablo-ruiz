@@ -7,7 +7,6 @@
 	   <node pkg="homework4" type="hw4_node.py" name="homework4" />
     </group>
 
-    <remap from="/homework1/total" to="/homework3/conversions" />
     <include file= "$(find homework2)/launch/homework2.launch" />
 
     
