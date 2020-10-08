@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 
-
 import rospy
 import actionlib
 import example_action_server.msg
@@ -8,14 +7,16 @@ from example_service.srv import Fibonacci
 
 def hw4_service_client(num_elements):
     
-    rospy.wait_for_service('calc_fibonacci')
+    rospy.wait_for_service('/calc_fibonacci')
     
     try:
         
-        service_client = rospy.ServiceProxy( 'calc_fibonacci', Fibonacci )
-        ros.loginfo( "Time before service is called" )
-        output = fibonacci_sequence( num_elements ) ;
-        ros.loginfo( "Time when service returns" )
+        service_client = rospy.ServiceProxy( '/calc_fibonacci', Fibonacci )
+        
+        rospy.loginfo( "Time before sending service request" )
+        output = service_client( num_elements ) 
+        rospy.loginfo( "Time when service returns" )
+        
         return output
 
     except rospy.ServiceException as e:
@@ -23,24 +24,24 @@ def hw4_service_client(num_elements):
         print( "Service call failed: %s" %e )
 
 def hw4_action_client( num_elements ):
-        
-    action_client = actionlib.SimpleActionClient( 'fibonacci', example_action_server.msg.FibonacciAction )
+    
+    action_client = actionlib.SimpleActionClient( '/fibonacci', example_action_server.msg.FibonacciAction )
 
     action_client.wait_for_server()
 
     goal = example_action_server.msg.FibonacciGoal( order = num_elements )
 
-    ros.loginfo( "Time before action is called" )
+    rospy.loginfo( "Time before action goal is sent" )
     
-    client.send_goal( goal )
+    action_client.send_goal( goal )
 
-    ros.loginfo( "Time after action is called" )
+    rospy.loginfo( "Time after action goal is sent" )
 
-    client.wait_for_result()
+    action_client.wait_for_result()
 
-    ros.loginfo( "Time when action returns" )
+    rospy.loginfo( "Time when action returns with result" )
 
-    return client.get_result()
+    return action_client.get_result()
 
 if __name__ == '__main__':
     try:
