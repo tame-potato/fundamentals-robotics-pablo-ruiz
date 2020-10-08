@@ -1,0 +1,12 @@
+<launch>
+
+    <include file= "$(find example_action_server)/launch/fibonacci.launch" />
+    <include file= "$(find example_service)/launch/fibonacci.launch" />    
+
+    <group ns="homework4">
+	   <param name="num_elements" type="int" value="3" />
+	   <node pkg="homework4" type="hw4_fibonacci.py" name="homework4_client" />
+    </group>
+
+    
+</launch>
