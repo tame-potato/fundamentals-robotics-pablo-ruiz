@@ -18,7 +18,8 @@ class hw4:
 
         switcher = {
             "meters": lambda a: a.data*0.3048 ,
-            "smoots": lambda a: a.data*0.179104
+            "smoots": lambda a: a.data*0.179104 ,
+            "feet": lambda a: a.data
         }
 
         func = switcher.get(output_unit,lambda: print("Unit Conversion Not Supported"))
@@ -32,7 +33,7 @@ class hw4:
         if rospy.has_param("output_unit"):
             self.converted_output.units = rospy.get_param("output_unit")
         else:
-            self.converted_output.units = "meters"
+            self.converted_output.units = "feet"
 
         self.converted_output.data = self.conversion(feet,self.converted_output.units)
 
