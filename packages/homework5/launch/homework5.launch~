@@ -1,0 +1,9 @@
+<launch>
+
+    <group ns="homework5">
+	   <param name="controller_ready" type="string" value="true" />
+	   <include file= "$(find controls_hw)/launch/start_dynamics.launch" />
+	   <node pkg="homework5" type="homework5_node.py" name="homework5" />
+    </group>
+    
+</launch>

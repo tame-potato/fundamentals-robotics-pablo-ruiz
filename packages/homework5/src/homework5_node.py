@@ -1,0 +1,32 @@
+#! /usr/bin/env python3
+
+import rospy
+from std_msgs.msg import Float32
+from homework5_library import PID_controller
+
+class hw5:
+
+    def __init__(self):
+        
+        self.controller = PID_controller()
+        self.controller.gains_setter(1,0,2)
+        
+        self.pub = rospy.Publisher("control_input", Float32, queue_size=10)
+        self.sub = rospy.Subscriber("error", Float32, self.callback)
+
+        rospy.set_param("controller_ready", "true")
+        
+    def callback(self, error):
+        
+        self.pub.publish(self.controller.PID(error))
+        
+if __name__ == "__main__":
+
+    rospy.init_node("homework5")
+
+    x = hw5()
+
+    rospy.spin()
+    
+
+    

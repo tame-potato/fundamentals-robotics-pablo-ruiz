@@ -1,6 +1,6 @@
 # parameters
 ARG REPO_NAME="fundamentals-robotics-pablo-ruiz"
-ARG DESCRIPTION="Pablo Ruiz repo for EECE-5560"
+ARG DESCRIPTION="Student class repo for UML EECE 5560"
 ARG MAINTAINER="Pablo Ruiz (pablo_ruiz@student.uml.edu)"
 # pick an icon from: https://fontawesome.com/v4.7.0/icons/
 ARG ICON="cube"
@@ -56,8 +56,8 @@ COPY ./dependencies-py3.txt "${REPO_PATH}/"
 RUN pip3 install --use-feature=2020-resolver -r ${REPO_PATH}/dependencies-py3.txt
 
 # copy the source code
-# COPY ./packages "${REPO_PATH}/packages"
-# COPY ./eece5560/. "${COURSE_PATH}"
+#COPY ./packages "${REPO_PATH}/packages"
+#COPY ./eece5560/. "${COURSE_PATH}"
 
 # build packages
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \

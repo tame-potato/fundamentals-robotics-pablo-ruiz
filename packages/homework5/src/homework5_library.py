@@ -1,0 +1,35 @@
+#1 /usr/bin/env python3
+
+import rospy
+
+class PID_controller:
+    def __init__(self):
+
+        self.previous_time = rospy.get_time()
+        self.time = 0
+        self.previous_error = 0
+        self.running_sum = 0
+        self.output = 0
+        self.k_p = 1
+        self.k_i = 0
+        self.k_d = 0
+
+    def gains_setter(self, p, i, d):
+        
+        self.k_p = p
+        self.k_i = i
+        self.k_d = d
+
+    def PID(self, error):
+
+        self.time = rospy.get_time()
+
+        self.running_sum += error.data * (self.time-self.previous_time)
+
+        self.output = self.k_p*(error.data) + self.k_i*(self.running_sum) + self.k_d*(error.data - self.previous_error)/(self.time-self.previous_time)
+
+        self.previous_error = error.data
+        self.previous_time = self.time
+
+        return self.output
+        
