@@ -1,8 +1,6 @@
 <launch>
 
-    <group ns="homework7">
 	   <include file="$(find odometry_hw)/launch/odom_hw.launch" />
 	   <node pkg="homework7" type="homework7_node.py" name="homework7" />
-    </group>
     
 </launch>
