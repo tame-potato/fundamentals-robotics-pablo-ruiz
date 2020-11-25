@@ -1,0 +1,8 @@
+<launch>
+    <group ns="$(env VEHICLE_NAME)">
+
+        <node pkg="lab2" type="lab2_square.py" name="lab2_square" />	
+
+    </group>
+
+</launch>
