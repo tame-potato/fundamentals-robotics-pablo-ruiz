@@ -1,0 +1,53 @@
+#! /usr/bin/env python3
+
+import rospy
+import sys
+import cv2
+import numpy as np
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+
+class process_image():
+
+    def __init__(self):
+        
+        self.bridge = CvBridge()
+        
+        self.sub = rospy.Subscriber("/image", Image ,self.callback)
+        self.pub_cropped = rospy.Publisher( "image_cropped", Image , queue_size=10)
+        self.pub_white = rospy.Publisher("image_white_filter", Image, queue_size=10)
+        self.pub_yellow = rospy.Publisher("image_yellow_filter", Image, queue_size=10)
+        self.kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
+        
+    def callback(self, rosImage):
+     
+        cvImage = self.bridge.imgmsg_to_cv2(rosImage)
+        cvImage = cvImage[cvImage.shape[0]//2 - 1 : cvImage.shape[0]]
+        cvImage_HSV = cv2.cvtColor(cvImage, cv2.COLOR_BGR2HSV)
+        
+        cvImage_filtered_white = cv2.inRange(cvImage_HSV, (0,0,150), (255,30,255))
+        cvImage_filtered_yellow = cv2.inRange(cvImage_HSV, (30,100,150), (60,255,255))
+
+        cvImage_filtered_white = cv2.erode(cvImage_filtered_white, self.kernel)
+        cvImage_filtered_yellow = cv2.erode(cvImage_filtered_yellow, self.kernel)
+        cvImage_filtered_white = cv2.dilate(cvImage_filtered_white, self.kernel)
+        cvImage_filtered_yellow = cv2.dilate(cvImage_filtered_yellow, self.kernel)
+
+        cvImage = self.bridge.cv2_to_imgmsg(cvImage, "bgr8")        
+        cvImage_filtered_white = self.bridge.cv2_to_imgmsg(cvImage_filtered_white, "mono8")
+        cvImage_filtered_yellow = self.bridge.cv2_to_imgmsg(cvImage_filtered_yellow, "mono8")
+        
+        self.pub_cropped.publish(cvImage)
+        self.pub_white.publish(cvImage_filtered_white)
+        self.pub_yellow.publish(cvImage_filtered_yellow)
+
+        
+if __name__ == "__main__":
+    
+    rospy.init_node("image_filter")
+
+    process_image()
+
+    rospy.spin()
+
+    

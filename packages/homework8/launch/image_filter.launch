@@ -1,0 +1,5 @@
+<launch>
+
+	<node name="image_filter" pkg="homework8" type="image_filter.py" />
+
+</launch>
