@@ -1,0 +1,6 @@
+<launch>
+
+	   <include file="$(find homework8)/launch/image_filter.launch" />
+	   <node pkg="homework9" type="edge_detection.py" name="edge_detection" />
+    
+</launch>

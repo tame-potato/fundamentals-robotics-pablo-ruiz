@@ -1,0 +1,65 @@
+#! /usr/bin/env python3
+
+import rospy
+import cv2
+import numpy as np
+import message_filters
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+
+class detect_edges():
+
+    def __init__(self):
+
+        self.sub_cropped = message_filters.Subscriber("/image_cropped", Image)
+        self.sub_white = message_filters.Subscriber("/image_white_filter", Image)
+        self.sub_yellow = message_filters.Subscriber("/image_yellow_filter", Image)
+
+        self.ts = message_filters.TimeSynchronizer([self.sub_cropped, self.sub_white, self.sub_yellow], queue_size=10)
+        self.ts.registerCallback(self.callback)
+        
+        self.pub = rospy.Publisher("image_lines_all", Image, queue_size=10)
+        self.pub_white = rospy.Publisher("image_edges_white", Image, queue_size=10)
+        self.pub_yellow = rospy.Publisher("image_edges_yellow", Image, queue_size=10)
+
+        self.bridge = CvBridge()
+        
+    def callback(self, img_cropped, img_white, img_yellow):
+
+        img_cropped = self.bridge.imgmsg_to_cv2(img_cropped)
+        img_white = self.bridge.imgmsg_to_cv2(img_white)
+        img_yellow = self.bridge.imgmsg_to_cv2(img_yellow)        
+        
+        img_edges = cv2.Canny(img_cropped, 50, 100)
+
+        img_edges_white = cv2.bitwise_and(img_edges, img_edges, mask=img_white)
+        img_edges_yellow = cv2.bitwise_and(img_edges,img_edges, mask=img_yellow)
+
+        lines_white = cv2.HoughLinesP(img_edges_white, rho=1, theta=np.pi/180, threshold=30, minLineLength=1, maxLineGap=100)
+        lines_yellow = cv2.HoughLinesP(img_edges_yellow, rho=1, theta=np.pi/180, threshold=30, minLineLength=1, maxLineGap=100)
+
+        rospy.loginfo(lines_white)
+        
+        for i in lines_white:
+            cv2.line(img_cropped, (i[0][0],i[0][1]), (i[0][2],i[0][3]), (255,0,0), 2)
+            
+        for i in lines_yellow:
+            cv2.line(img_cropped, (i[0][0],i[0][1]), (i[0][2],i[0][3]), (255,0,0), 2)
+
+        img_cropped = self.bridge.cv2_to_imgmsg(img_cropped, "bgr8")
+        img_edges_white = self.bridge.cv2_to_imgmsg(img_edges_wh, "mono8")
+        img_edges_yellow = self.bridge.cv2_to_imgmsg(img_edges_yellow, "mono8")
+            
+        self.pub.publish(img_cropped)
+        self.pub_white.publish(img_edges_white)        
+        self.pub_yellow.publish(img_edges_yellow)
+        
+if __name__ == "__main__":
+    
+    rospy.init_node("edge_detection")
+
+    detect_edges()
+
+    rospy.spin()
+
+    

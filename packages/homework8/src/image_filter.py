@@ -17,7 +17,8 @@ class process_image():
         self.pub_cropped = rospy.Publisher( "image_cropped", Image , queue_size=10)
         self.pub_white = rospy.Publisher("image_white_filter", Image, queue_size=10)
         self.pub_yellow = rospy.Publisher("image_yellow_filter", Image, queue_size=10)
-        self.kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
+        self.kernel_errode = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
+        self.kernel_dilate = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7,7))
         
     def callback(self, rosImage):
      
@@ -28,10 +29,10 @@ class process_image():
         cvImage_filtered_white = cv2.inRange(cvImage_HSV, (0,0,150), (255,30,255))
         cvImage_filtered_yellow = cv2.inRange(cvImage_HSV, (30,100,150), (60,255,255))
 
-        cvImage_filtered_white = cv2.erode(cvImage_filtered_white, self.kernel)
-        cvImage_filtered_yellow = cv2.erode(cvImage_filtered_yellow, self.kernel)
-        cvImage_filtered_white = cv2.dilate(cvImage_filtered_white, self.kernel)
-        cvImage_filtered_yellow = cv2.dilate(cvImage_filtered_yellow, self.kernel)
+        cvImage_filtered_white = cv2.erode(cvImage_filtered_white, self.kernel_errode)
+        cvImage_filtered_yellow = cv2.erode(cvImage_filtered_yellow, self.kernel_errode)
+        cvImage_filtered_white = cv2.dilate(cvImage_filtered_white, self.kernel_dilate)
+        cvImage_filtered_yellow = cv2.dilate(cvImage_filtered_yellow, self.kernel_dilate)
 
         cvImage = self.bridge.cv2_to_imgmsg(cvImage, "bgr8")        
         cvImage_filtered_white = self.bridge.cv2_to_imgmsg(cvImage_filtered_white, "mono8")
