@@ -4,13 +4,13 @@
 # Programmer: Pablo Ruiz
 
 import rospy
-from duckietown_msgs import Twist2DStamped
+from duckietown_msgs.msg import Twist2DStamped
 
 class make_thing_do_circle:
 
     def __init__(self):
 
-        self.pub = rospy.Publisher("/car_cmd_switch_node/cmd_topic", Twist2DStamped, queue_size = 10)
+        self.pub = rospy.Publisher("car_cmd_switch_node/cmd", Twist2DStamped, queue_size = 10)
         self.rate = rospy.Rate(10)
 
     def DO_CIRCLE_NOW(self):
@@ -19,9 +19,9 @@ class make_thing_do_circle:
 
         self.command.v = 0.2
 
-        self.command.omega = 2 
+        self.command.omega = 1.4 
 
-        for i in range(0, 100):
+        for i in range(0, 182):
 
             self.pub.publish(self.command)
 

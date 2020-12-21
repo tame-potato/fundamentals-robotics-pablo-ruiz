@@ -24,11 +24,11 @@ class PID_controller:
 
         self.time = rospy.get_time()
 
-        self.running_sum += error.data * (self.time-self.previous_time)
+        self.running_sum += error * (self.time-self.previous_time)
 
-        self.output = self.k_p*(error.data) + self.k_i*(self.running_sum) + self.k_d*(error.data - self.previous_error)/(self.time-self.previous_time)
+        self.output = self.k_p*(error) + self.k_i*(self.running_sum) + self.k_d*(error - self.previous_error)/(self.time-self.previous_time)
 
-        self.previous_error = error.data
+        self.previous_error = error
         self.previous_time = self.time
 
         return self.output

@@ -33,7 +33,6 @@
 
 	</include>
 	<group ns="$(env VEHICLE_NAME)">
-	    <param name="controller_ready" type="string" value="false" />
 	    <node pkg="lab3" type="lab3_node.py" name="lab3" />
 	</group>
 </launch>
