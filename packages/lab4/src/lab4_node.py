@@ -30,16 +30,16 @@ class odometry:
         self.sign_right = 1
 
         self.axleSpacing = 0.1
-        self.diameter = 0.068
-        self.ticks_total = 135
+        self.diameter = 0.067
+        self.ticks_total = 100
 
     def delta(self,delta_r, delta_l):
         delta_s = (delta_r+delta_l) / 2
-        delta_theta = (delta_r-delta_l) / (2*self.axleSpacing)
+        delta_theta = (delta_r-delta_l) / (self.axleSpacing)
         return delta_s, delta_theta
 
     def ticks_to_m(self, ticks):
-        return self.diameter * math.pi / self.ticks_total * ticks
+        return ((self.diameter * math.pi * ticks) / self.ticks_total)
 
     def velocity_direction(self, twist):
 
@@ -58,7 +58,7 @@ class odometry:
             self.sign_right = 1 
             self.sign_left = -1
 
-        else:
+        elif twist.omega < 0:
 
             self.sign_right = -1 
             self.sign_left = 1
@@ -88,9 +88,10 @@ class odometry:
             self.pose.theta += delta_theta
             #self.pose.theta = (self.pose.theta / 2*math.pi) % 1 * (2*math.pi)
 
+            self.pose.distance_travelled += delta_s 
+
             self.pub.publish(self.pose)
 
-            self.pose.distance_travelled += delta_s 
             self.previous_l_ticks = full_left_tick.data
             self.previous_r_ticks = full_right_tick.data
         

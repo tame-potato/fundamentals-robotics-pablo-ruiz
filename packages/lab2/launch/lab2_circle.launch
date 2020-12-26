@@ -1,5 +1,5 @@
 <launch>
-    <group ns="$(env VEHICLE_NAME)">
+    <group ns="/dbruiz">
 
         <node pkg="lab2" type="lab2_circle.py" name="lab2_circle" />	
 

@@ -19,9 +19,9 @@ class make_thing_do_circle:
 
         self.command.v = 0.2
 
-        self.command.omega = 1.4 
+        self.command.omega = 1.1 
 
-        for i in range(0, 182):
+        for i in range(0, 150):
 
             self.pub.publish(self.command)
 
